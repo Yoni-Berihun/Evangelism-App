@@ -1,37 +1,26 @@
-class Mission {
-  final String id;
-  final String name;
-  final DateTime startDate;
-  final DateTime endDate;
-  final String location;
-  final double budget;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Mission({
-    required this.id,
-    required this.name,
-    required this.startDate,
-    required this.endDate,
-    required this.location,
-    required this.budget,
-  });
+part 'mission.freezed.dart';
+part 'mission.g.dart';
 
-  factory Mission.fromJson(Map<String, dynamic> json) {
-    return Mission(
-      id: json['id'],
-      name: json['name'],
-      startDate: DateTime.parse(json['start_date']),
-      endDate: DateTime.parse(json['end_date']),
-      location: json['location'],
-      budget: (json['budget'] as num).toDouble(),
-    );
-  }
+@freezed
+class Mission with _$Mission {
+  const factory Mission({
+    required String id,
+    required String accountId,
+    required String missionName,
+    required String location,
+    required double latitude,
+    required double longitude,
+    required String teamName,
+    required DateTime startDate,
+    required DateTime endDate,
+    required double budget,
+    String? assignedMissionaryId,
+    String? assignedMissionaryName,
+    required DateTime createdAt,
+  }) = _Mission;
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'start_date': startDate.toIso8601String(),
-        'end_date': endDate.toIso8601String(),
-        'location': location,
-        'budget': budget,
-      };
+  factory Mission.fromJson(Map<String, dynamic> json) =>
+      _$MissionFromJson(json);
 }
