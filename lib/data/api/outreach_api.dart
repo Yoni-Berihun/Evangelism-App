@@ -1,4 +1,4 @@
-import '../api_client.dart';
+import 'api_client.dart';
 import '../../models/outreach_data.dart';
 import '../../models/outreach_number.dart';
 import '../../core/constants/api_constants.dart';

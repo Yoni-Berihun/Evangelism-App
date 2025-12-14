@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/utils/date_utils.dart';
+import '../../core/utils/date_utils.dart' as AppDateUtils;
 import '../../models/mission.dart';
 import '../../models/expense.dart';
 import '../../providers/expense_provider.dart';
@@ -17,7 +17,7 @@ class AdminExpenseDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final expenses = ref.watch(expensesProvider(missionId));
+    final expenses = ref.watch(expensesProvider(missionId: missionId));
     final missions = ref.watch(missionNotifierProvider);
 
     return Scaffold(
@@ -130,7 +130,7 @@ class AdminExpenseDetailsScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  expense.description,
+                  expense.description ?? 'No description',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -138,7 +138,7 @@ class AdminExpenseDetailsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '${_getCategoryName(expense.category)} • ${DateUtils.formatDate(expense.date)}',
+                  '${_getCategoryName(expense.category)} • ${_formatDate(expense.createdAt)}',
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.textSecondary,
@@ -160,33 +160,46 @@ class AdminExpenseDetailsScreen extends ConsumerWidget {
     );
   }
 
-  IconData _getCategoryIcon(ExpenseCategory category) {
+  String _formatDate(String dateString) {
+    try {
+      final date = DateTime.parse(dateString);
+      return AppDateUtils.DateUtils.formatDate(date);
+    } catch (e) {
+      return dateString;
+    }
+  }
+
+  IconData _getCategoryIcon(String category) {
     switch (category) {
-      case ExpenseCategory.travel:
+      case 'travel':
         return Icons.flight;
-      case ExpenseCategory.food:
+      case 'food':
         return Icons.restaurant;
-      case ExpenseCategory.supplies:
+      case 'supplies':
         return Icons.shopping_bag;
-      case ExpenseCategory.accommodation:
+      case 'accommodation':
         return Icons.hotel;
-      case ExpenseCategory.other:
+      case 'other':
+        return Icons.more_horiz;
+      default:
         return Icons.more_horiz;
     }
   }
 
-  String _getCategoryName(ExpenseCategory category) {
+  String _getCategoryName(String category) {
     switch (category) {
-      case ExpenseCategory.travel:
+      case 'travel':
         return 'Travel';
-      case ExpenseCategory.food:
+      case 'food':
         return 'Food';
-      case ExpenseCategory.supplies:
+      case 'supplies':
         return 'Supplies';
-      case ExpenseCategory.accommodation:
+      case 'accommodation':
         return 'Accommodation';
-      case ExpenseCategory.other:
+      case 'other':
         return 'Other';
+      default:
+        return category;
     }
   }
 }

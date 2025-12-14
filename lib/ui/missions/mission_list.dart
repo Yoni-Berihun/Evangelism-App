@@ -7,7 +7,8 @@ class MissionListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final missions = ref.watch(missionProvider);
+    final missionsAsync = ref.watch(missionNotifierProvider);
+    final missions = missionsAsync.valueOrNull ?? [];
 
     return Scaffold(
       appBar: AppBar(title: const Text("Missions")),
@@ -17,13 +18,15 @@ class MissionListScreen extends ConsumerWidget {
           final mission = missions[index];
           return ListTile(
             title: Text(mission.name),
-            subtitle: Text("${mission.location} • Budget: ${mission.budget}"),
+            subtitle: Text(
+              "${mission.location?['address'] ?? 'No location'} • Budget: \$${mission.budget?.toStringAsFixed(2) ?? '0.00'}",
+            ),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ref.read(missionProvider.notifier).fetchMissions();
+          ref.read(missionNotifierProvider.notifier).refresh();
         },
         child: const Icon(Icons.refresh),
       ),
