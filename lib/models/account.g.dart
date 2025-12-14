@@ -9,21 +9,25 @@ part of 'account.dart';
 _$AccountImpl _$$AccountImplFromJson(Map<String, dynamic> json) =>
     _$AccountImpl(
       id: json['id'] as String,
-      accountName: json['accountName'] as String,
-      logoUrl: json['logoUrl'] as String?,
-      subscriptionPlan: json['subscriptionPlan'] as String,
-      subscriptionExpiresAt: DateTime.parse(
-        json['subscriptionExpiresAt'] as String,
-      ),
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      accountName: json['account_name'] as String,
+      email: json['email'] as String?,
+      phoneNumber: json['phone_number'] as String?,
+      location: json['location'] as String?,
+      createdBy: json['created_by'] as String,
+      isActive: json['is_active'] as bool,
+      createdAt: json['created_at'] as String,
+      updatedAt: json['updated_at'] as String,
     );
 
 Map<String, dynamic> _$$AccountImplToJson(_$AccountImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'accountName': instance.accountName,
-      'logoUrl': instance.logoUrl,
-      'subscriptionPlan': instance.subscriptionPlan,
-      'subscriptionExpiresAt': instance.subscriptionExpiresAt.toIso8601String(),
-      'createdAt': instance.createdAt.toIso8601String(),
+      'account_name': instance.accountName,
+      'email': instance.email,
+      'phone_number': instance.phoneNumber,
+      'location': instance.location,
+      'created_by': instance.createdBy,
+      'is_active': instance.isActive,
+      'created_at': instance.createdAt,
+      'updated_at': instance.updatedAt,
     };

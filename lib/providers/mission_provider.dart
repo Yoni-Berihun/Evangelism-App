@@ -5,6 +5,7 @@ import '../data/repositories/mission_repository.dart';
 import '../models/mission.dart';
 import '../models/user.dart';
 import 'auth_provider.dart';
+import 'account_provider.dart';
 
 part 'mission_provider.g.dart';
 
@@ -22,13 +23,20 @@ MissionRepository missionRepository(MissionRepositoryRef ref) {
 class MissionNotifier extends _$MissionNotifier {
   @override
   Future<List<Mission>> build() async {
-    final accountId = ref.watch(currentAccountIdProvider);
+    final accountIdAsync = ref.watch(currentAccountIdProvider);
+    final accountId = await accountIdAsync.valueOrNull;
+    if (accountId == null) return [];
     return ref.read(missionRepositoryProvider).getMissions(accountId);
   }
 
   Future<void> refresh() async {
     state = const AsyncValue.loading();
-    final accountId = ref.read(currentAccountIdProvider);
+    final accountIdAsync = ref.read(currentAccountIdProvider);
+    final accountId = await accountIdAsync.valueOrNull;
+    if (accountId == null) {
+      state = const AsyncValue.data([]);
+      return;
+    }
     try {
       final missions =
           await ref.read(missionRepositoryProvider).getMissions(accountId);

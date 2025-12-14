@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/utils/date_utils.dart';
+import '../../core/utils/date_utils.dart' as AppDateUtils;
 import '../../models/mission.dart';
 
 class MissionDetailCard extends StatelessWidget {
@@ -97,7 +97,7 @@ class MissionDetailCard extends StatelessWidget {
   String _formatDate(String dateString) {
     try {
       final date = DateTime.parse(dateString);
-      return DateUtils.formatDate(date);
+      return AppDateUtils.DateUtils.formatDate(date);
     } catch (e) {
       return dateString;
     }

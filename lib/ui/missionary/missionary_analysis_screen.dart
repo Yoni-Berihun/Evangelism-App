@@ -27,8 +27,8 @@ class MissionaryAnalysisScreen extends ConsumerWidget {
             );
           }
 
-          final outreachData = ref.watch(outreachDataProvider(userMission.id));
-          final expenses = ref.watch(expensesProvider(userMission.id));
+          final outreachNumbers = ref.watch(outreachNumbersProvider(userMission.id));
+          final expenses = ref.watch(expensesProvider(missionId: userMission.id));
 
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -37,12 +37,10 @@ class MissionaryAnalysisScreen extends ConsumerWidget {
               Row(
                 children: [
                   Expanded(
-                    child: outreachData.when(
-                      data: (data) => StatCard(
-                        value: data
-                            .fold<int>(0, (sum, d) => sum + d.soulsSaved)
-                            .toString(),
-                        label: 'Total Souls',
+                    child: ref.watch(outreachNumbersProvider(userMission.id)).when(
+                      data: (numbers) => StatCard(
+                        value: (numbers?.saved ?? 0).toString(),
+                        label: 'Total Saved',
                         color: AppColors.missionaryPrimary,
                       ),
                       loading: () => const StatCard(
@@ -59,12 +57,10 @@ class MissionaryAnalysisScreen extends ConsumerWidget {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: outreachData.when(
-                      data: (data) => StatCard(
-                        value: data
-                            .fold<int>(0, (sum, d) => sum + d.baptisms)
-                            .toString(),
-                        label: 'Total Baptisms',
+                    child: ref.watch(outreachNumbersProvider(userMission.id)).when(
+                      data: (numbers) => StatCard(
+                        value: (numbers?.interested ?? 0).toString(),
+                        label: 'Total Interested',
                         color: AppColors.green,
                       ),
                       loading: () => const StatCard(
@@ -98,28 +94,74 @@ class MissionaryAnalysisScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-                child: outreachData.when(
-                  data: (data) {
-                    if (data.isEmpty) {
+                child: outreachNumbers.when(
+                  data: (numbers) {
+                    if (numbers == null) {
                       return const Center(child: Text('No data available'));
                     }
-                    return LineChart(
-                      LineChartData(
+                    // Simple bar chart showing outreach numbers
+                    return BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.spaceAround,
+                        maxY: (numbers.saved + numbers.interested + numbers.heared).toDouble() + 10,
+                        barTouchData: BarTouchData(enabled: false),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                switch (value.toInt()) {
+                                  case 0:
+                                    return const Text('Saved');
+                                  case 1:
+                                    return const Text('Interested');
+                                  case 2:
+                                    return const Text('Heard');
+                                  default:
+                                    return const Text('');
+                                }
+                              },
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: true),
+                          ),
+                          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        ),
                         gridData: FlGridData(show: false),
-                        titlesData: FlTitlesData(show: false),
                         borderData: FlBorderData(show: false),
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: data.asMap().entries.map((entry) {
-                              return FlSpot(
-                                entry.key.toDouble(),
-                                entry.value.soulsSaved.toDouble(),
-                              );
-                            }).toList(),
-                            isCurved: true,
-                            color: AppColors.missionaryPrimary,
-                            barWidth: 3,
-                            dotData: FlDotData(show: true),
+                        barGroups: [
+                          BarChartGroupData(
+                            x: 0,
+                            barRods: [
+                              BarChartRodData(
+                                toY: numbers.saved.toDouble(),
+                                color: AppColors.missionaryPrimary,
+                                width: 20,
+                              ),
+                            ],
+                          ),
+                          BarChartGroupData(
+                            x: 1,
+                            barRods: [
+                              BarChartRodData(
+                                toY: numbers.interested.toDouble(),
+                                color: AppColors.green,
+                                width: 20,
+                              ),
+                            ],
+                          ),
+                          BarChartGroupData(
+                            x: 2,
+                            barRods: [
+                              BarChartRodData(
+                                toY: numbers.heared.toDouble(),
+                                color: AppColors.orange,
+                                width: 20,
+                              ),
+                            ],
                           ),
                         ],
                       ),

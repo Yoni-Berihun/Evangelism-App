@@ -426,7 +426,7 @@ class _MissionStatsProviderElement
   String get missionId => (origin as MissionStatsProvider).missionId;
 }
 
-String _$outreachNotifierHash() => r'd859c155c2fddf65a1cef10194ebdd8526ab36a8';
+String _$outreachNotifierHash() => r'c0422f2e797709e91de8577ce2f32d262c212e51';
 
 abstract class _$OutreachNotifier
     extends BuildlessAutoDisposeAsyncNotifier<List<OutreachData>> {

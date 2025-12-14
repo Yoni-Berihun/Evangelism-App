@@ -4,6 +4,7 @@ import '../../core/constants/app_colors.dart';
 import '../../providers/mission_provider.dart';
 import '../../providers/outreach_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/account_provider.dart';
 import '../../data/repositories/outreach_repository.dart';
 import '../widgets/counter_button.dart';
 import '../widgets/success_dialog.dart';
@@ -305,7 +306,14 @@ class _MissionaryLogImpactScreenState
     final mission = await ref.read(userMissionProvider.future);
     if (mission == null) return;
 
-    final accountId = ref.read(currentAccountIdProvider);
+    final accountIdAsync = ref.read(currentAccountIdProvider);
+    final accountId = await accountIdAsync.valueOrNull;
+    if (accountId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No account selected')),
+      );
+      return;
+    }
     
     // Get current outreach numbers
     final currentNumbers = await ref.read(outreachNumbersProvider(mission.id).future);

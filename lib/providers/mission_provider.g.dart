@@ -75,7 +75,7 @@ final missionariesProvider = AutoDisposeFutureProvider<List<User>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef MissionariesRef = AutoDisposeFutureProviderRef<List<User>>;
-String _$missionNotifierHash() => r'b229cee004eef8b9ee52ed3afdfcba37321372d0';
+String _$missionNotifierHash() => r'a7b7559e64b2db388c139cda155dc168d45e659e';
 
 /// See also [MissionNotifier].
 @ProviderFor(MissionNotifier)

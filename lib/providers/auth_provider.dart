@@ -98,10 +98,4 @@ String? userRole(UserRoleRef ref) {
   return authState.valueOrNull?.role; // 'admin' or 'missionary'
 }
 
-@riverpod
-String currentAccountId(CurrentAccountIdRef ref) {
-  // Get current account ID from user's account mapping
-  // For demo, return default account
-  // In production, get from user's account relationship
-  return 'default_account_id';
-}
+// Moved to account_provider.dart

@@ -9,6 +9,7 @@ import '../../providers/filter_provider.dart';
 import '../widgets/filter_bar.dart';
 import '../widgets/map_marker.dart';
 import '../widgets/mission_detail_card.dart';
+import '../widgets/account_switcher.dart';
 import 'admin_add_mission_screen.dart';
 
 class AdminHomeScreen extends ConsumerWidget {
@@ -25,8 +26,8 @@ class AdminHomeScreen extends ConsumerWidget {
           // Map View
           FlutterMap(
             options: MapOptions(
-              center: const LatLng(37.7749, -122.4194),
-              zoom: 5.0,
+              initialCenter: const LatLng(37.7749, -122.4194),
+              initialZoom: 5.0,
             ),
             children: [
               TileLayer(
@@ -36,20 +37,28 @@ class AdminHomeScreen extends ConsumerWidget {
               ),
               MarkerLayer(
                 markers: missions.when(
-                  data: (missionList) => missionList.map((mission) {
+                  data: (missionList) => missionList
+                      .where((mission) => 
+                          mission.location != null &&
+                          mission.location!['latitude'] != null &&
+                          mission.location!['longitude'] != null)
+                      .map((mission) {
                     return Marker(
-                      point: LatLng(mission.latitude, mission.longitude),
+                      point: LatLng(
+                        (mission.location!['latitude'] as num).toDouble(),
+                        (mission.location!['longitude'] as num).toDouble(),
+                      ),
                       width: 40,
                       height: 40,
-                      builder: (context) => MapMarkerWidget(
+                      child: MapMarkerWidget(
                         mission: mission,
                         filterType: filters.filterType,
                         onTap: () => _showMissionDetails(context, ref, mission),
                       ),
                     );
                   }).toList(),
-                  loading: () => [],
-                  error: (_, __) => [],
+                  loading: () => <Marker>[],
+                  error: (_, __) => <Marker>[],
                 ),
               ),
             ],

@@ -4,6 +4,7 @@ import '../data/api/outreach_api.dart';
 import '../data/repositories/outreach_repository.dart';
 import '../models/outreach_data.dart';
 import '../models/outreach_number.dart';
+import 'auth_provider.dart';
 
 part 'outreach_provider.g.dart';
 
@@ -31,7 +32,7 @@ Future<OutreachNumber?> outreachNumbers(
 
 @riverpod
 class OutreachNotifier extends _$OutreachNotifier {
-  late String _missionId;
+  String? _missionId;
 
   @override
   Future<List<OutreachData>> build(String? missionId) async {

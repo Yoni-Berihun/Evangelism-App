@@ -22,11 +22,20 @@ Account _$AccountFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Account {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'account_name')
   String get accountName => throw _privateConstructorUsedError;
-  String? get logoUrl => throw _privateConstructorUsedError;
-  String get subscriptionPlan => throw _privateConstructorUsedError;
-  DateTime get subscriptionExpiresAt => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
+  @JsonKey(name: 'phone_number')
+  String? get phoneNumber => throw _privateConstructorUsedError;
+  String? get location => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_by')
+  String get createdBy => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_active')
+  bool get isActive => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
+  String get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
+  String get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this Account to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,11 +53,14 @@ abstract class $AccountCopyWith<$Res> {
   @useResult
   $Res call({
     String id,
-    String accountName,
-    String? logoUrl,
-    String subscriptionPlan,
-    DateTime subscriptionExpiresAt,
-    DateTime createdAt,
+    @JsonKey(name: 'account_name') String accountName,
+    String? email,
+    @JsonKey(name: 'phone_number') String? phoneNumber,
+    String? location,
+    @JsonKey(name: 'created_by') String createdBy,
+    @JsonKey(name: 'is_active') bool isActive,
+    @JsonKey(name: 'created_at') String createdAt,
+    @JsonKey(name: 'updated_at') String updatedAt,
   });
 }
 
@@ -69,10 +81,13 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
   $Res call({
     Object? id = null,
     Object? accountName = null,
-    Object? logoUrl = freezed,
-    Object? subscriptionPlan = null,
-    Object? subscriptionExpiresAt = null,
+    Object? email = freezed,
+    Object? phoneNumber = freezed,
+    Object? location = freezed,
+    Object? createdBy = null,
+    Object? isActive = null,
     Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(
       _value.copyWith(
@@ -84,22 +99,34 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
                 ? _value.accountName
                 : accountName // ignore: cast_nullable_to_non_nullable
                       as String,
-            logoUrl: freezed == logoUrl
-                ? _value.logoUrl
-                : logoUrl // ignore: cast_nullable_to_non_nullable
+            email: freezed == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
                       as String?,
-            subscriptionPlan: null == subscriptionPlan
-                ? _value.subscriptionPlan
-                : subscriptionPlan // ignore: cast_nullable_to_non_nullable
+            phoneNumber: freezed == phoneNumber
+                ? _value.phoneNumber
+                : phoneNumber // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            location: freezed == location
+                ? _value.location
+                : location // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            createdBy: null == createdBy
+                ? _value.createdBy
+                : createdBy // ignore: cast_nullable_to_non_nullable
                       as String,
-            subscriptionExpiresAt: null == subscriptionExpiresAt
-                ? _value.subscriptionExpiresAt
-                : subscriptionExpiresAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
+            isActive: null == isActive
+                ? _value.isActive
+                : isActive // ignore: cast_nullable_to_non_nullable
+                      as bool,
             createdAt: null == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
+                      as String,
+            updatedAt: null == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as String,
           )
           as $Val,
     );
@@ -116,11 +143,14 @@ abstract class _$$AccountImplCopyWith<$Res> implements $AccountCopyWith<$Res> {
   @useResult
   $Res call({
     String id,
-    String accountName,
-    String? logoUrl,
-    String subscriptionPlan,
-    DateTime subscriptionExpiresAt,
-    DateTime createdAt,
+    @JsonKey(name: 'account_name') String accountName,
+    String? email,
+    @JsonKey(name: 'phone_number') String? phoneNumber,
+    String? location,
+    @JsonKey(name: 'created_by') String createdBy,
+    @JsonKey(name: 'is_active') bool isActive,
+    @JsonKey(name: 'created_at') String createdAt,
+    @JsonKey(name: 'updated_at') String updatedAt,
   });
 }
 
@@ -140,10 +170,13 @@ class __$$AccountImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? accountName = null,
-    Object? logoUrl = freezed,
-    Object? subscriptionPlan = null,
-    Object? subscriptionExpiresAt = null,
+    Object? email = freezed,
+    Object? phoneNumber = freezed,
+    Object? location = freezed,
+    Object? createdBy = null,
+    Object? isActive = null,
     Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(
       _$AccountImpl(
@@ -155,22 +188,34 @@ class __$$AccountImplCopyWithImpl<$Res>
             ? _value.accountName
             : accountName // ignore: cast_nullable_to_non_nullable
                   as String,
-        logoUrl: freezed == logoUrl
-            ? _value.logoUrl
-            : logoUrl // ignore: cast_nullable_to_non_nullable
+        email: freezed == email
+            ? _value.email
+            : email // ignore: cast_nullable_to_non_nullable
                   as String?,
-        subscriptionPlan: null == subscriptionPlan
-            ? _value.subscriptionPlan
-            : subscriptionPlan // ignore: cast_nullable_to_non_nullable
+        phoneNumber: freezed == phoneNumber
+            ? _value.phoneNumber
+            : phoneNumber // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        location: freezed == location
+            ? _value.location
+            : location // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        createdBy: null == createdBy
+            ? _value.createdBy
+            : createdBy // ignore: cast_nullable_to_non_nullable
                   as String,
-        subscriptionExpiresAt: null == subscriptionExpiresAt
-            ? _value.subscriptionExpiresAt
-            : subscriptionExpiresAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+        isActive: null == isActive
+            ? _value.isActive
+            : isActive // ignore: cast_nullable_to_non_nullable
+                  as bool,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                  as String,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }
@@ -181,11 +226,14 @@ class __$$AccountImplCopyWithImpl<$Res>
 class _$AccountImpl implements _Account {
   const _$AccountImpl({
     required this.id,
-    required this.accountName,
-    this.logoUrl,
-    required this.subscriptionPlan,
-    required this.subscriptionExpiresAt,
-    required this.createdAt,
+    @JsonKey(name: 'account_name') required this.accountName,
+    this.email,
+    @JsonKey(name: 'phone_number') this.phoneNumber,
+    this.location,
+    @JsonKey(name: 'created_by') required this.createdBy,
+    @JsonKey(name: 'is_active') required this.isActive,
+    @JsonKey(name: 'created_at') required this.createdAt,
+    @JsonKey(name: 'updated_at') required this.updatedAt,
   });
 
   factory _$AccountImpl.fromJson(Map<String, dynamic> json) =>
@@ -194,19 +242,31 @@ class _$AccountImpl implements _Account {
   @override
   final String id;
   @override
+  @JsonKey(name: 'account_name')
   final String accountName;
   @override
-  final String? logoUrl;
+  final String? email;
   @override
-  final String subscriptionPlan;
+  @JsonKey(name: 'phone_number')
+  final String? phoneNumber;
   @override
-  final DateTime subscriptionExpiresAt;
+  final String? location;
   @override
-  final DateTime createdAt;
+  @JsonKey(name: 'created_by')
+  final String createdBy;
+  @override
+  @JsonKey(name: 'is_active')
+  final bool isActive;
+  @override
+  @JsonKey(name: 'created_at')
+  final String createdAt;
+  @override
+  @JsonKey(name: 'updated_at')
+  final String updatedAt;
 
   @override
   String toString() {
-    return 'Account(id: $id, accountName: $accountName, logoUrl: $logoUrl, subscriptionPlan: $subscriptionPlan, subscriptionExpiresAt: $subscriptionExpiresAt, createdAt: $createdAt)';
+    return 'Account(id: $id, accountName: $accountName, email: $email, phoneNumber: $phoneNumber, location: $location, createdBy: $createdBy, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -217,13 +277,19 @@ class _$AccountImpl implements _Account {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.accountName, accountName) ||
                 other.accountName == accountName) &&
-            (identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl) &&
-            (identical(other.subscriptionPlan, subscriptionPlan) ||
-                other.subscriptionPlan == subscriptionPlan) &&
-            (identical(other.subscriptionExpiresAt, subscriptionExpiresAt) ||
-                other.subscriptionExpiresAt == subscriptionExpiresAt) &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.phoneNumber, phoneNumber) ||
+                other.phoneNumber == phoneNumber) &&
+            (identical(other.location, location) ||
+                other.location == location) &&
+            (identical(other.createdBy, createdBy) ||
+                other.createdBy == createdBy) &&
+            (identical(other.isActive, isActive) ||
+                other.isActive == isActive) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -232,10 +298,13 @@ class _$AccountImpl implements _Account {
     runtimeType,
     id,
     accountName,
-    logoUrl,
-    subscriptionPlan,
-    subscriptionExpiresAt,
+    email,
+    phoneNumber,
+    location,
+    createdBy,
+    isActive,
     createdAt,
+    updatedAt,
   );
 
   /// Create a copy of Account
@@ -255,11 +324,14 @@ class _$AccountImpl implements _Account {
 abstract class _Account implements Account {
   const factory _Account({
     required final String id,
-    required final String accountName,
-    final String? logoUrl,
-    required final String subscriptionPlan,
-    required final DateTime subscriptionExpiresAt,
-    required final DateTime createdAt,
+    @JsonKey(name: 'account_name') required final String accountName,
+    final String? email,
+    @JsonKey(name: 'phone_number') final String? phoneNumber,
+    final String? location,
+    @JsonKey(name: 'created_by') required final String createdBy,
+    @JsonKey(name: 'is_active') required final bool isActive,
+    @JsonKey(name: 'created_at') required final String createdAt,
+    @JsonKey(name: 'updated_at') required final String updatedAt,
   }) = _$AccountImpl;
 
   factory _Account.fromJson(Map<String, dynamic> json) = _$AccountImpl.fromJson;
@@ -267,15 +339,27 @@ abstract class _Account implements Account {
   @override
   String get id;
   @override
+  @JsonKey(name: 'account_name')
   String get accountName;
   @override
-  String? get logoUrl;
+  String? get email;
   @override
-  String get subscriptionPlan;
+  @JsonKey(name: 'phone_number')
+  String? get phoneNumber;
   @override
-  DateTime get subscriptionExpiresAt;
+  String? get location;
   @override
-  DateTime get createdAt;
+  @JsonKey(name: 'created_by')
+  String get createdBy;
+  @override
+  @JsonKey(name: 'is_active')
+  bool get isActive;
+  @override
+  @JsonKey(name: 'created_at')
+  String get createdAt;
+  @override
+  @JsonKey(name: 'updated_at')
+  String get updatedAt;
 
   /// Create a copy of Account
   /// with the given fields replaced by the non-null parameter values.

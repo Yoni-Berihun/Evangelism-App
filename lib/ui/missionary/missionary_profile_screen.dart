@@ -31,14 +31,7 @@ class MissionaryProfileScreen extends ConsumerWidget {
                     CircleAvatar(
                       radius: 50,
                       backgroundColor: AppColors.missionaryPrimary,
-                      child: user.profilePictureUrl != null
-                          ? ClipOval(
-                              child: Image.network(
-                                user.profilePictureUrl!,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : Text(
+                      child: Text(
                               user.fullName.isNotEmpty
                                   ? user.fullName[0].toUpperCase()
                                   : 'M',

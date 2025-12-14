@@ -179,7 +179,7 @@ class _ExpensesProviderElement
   String? get missionId => (origin as ExpensesProvider).missionId;
 }
 
-String _$expenseNotifierHash() => r'3344a4d0742f8af53c8bd3c7f6793adf7baaeeff';
+String _$expenseNotifierHash() => r'c9456bdebdfb22a4ddb8b18900d7c93906172c45';
 
 abstract class _$ExpenseNotifier
     extends BuildlessAutoDisposeAsyncNotifier<List<Expense>> {

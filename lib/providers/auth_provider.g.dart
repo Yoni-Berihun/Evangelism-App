@@ -74,23 +74,6 @@ final userRoleProvider = AutoDisposeProvider<String?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UserRoleRef = AutoDisposeProviderRef<String?>;
-String _$currentAccountIdHash() => r'2469a28f185f809e52cd133bca9610eae7e56b7d';
-
-/// See also [currentAccountId].
-@ProviderFor(currentAccountId)
-final currentAccountIdProvider = AutoDisposeProvider<String>.internal(
-  currentAccountId,
-  name: r'currentAccountIdProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$currentAccountIdHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef CurrentAccountIdRef = AutoDisposeProviderRef<String>;
 String _$authNotifierHash() => r'74bd780db487f93a761f5b967630f10241e4d176';
 
 /// See also [AuthNotifier].

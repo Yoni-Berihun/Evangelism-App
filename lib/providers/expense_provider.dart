@@ -3,6 +3,7 @@ import '../data/api/api_client.dart';
 import '../data/api/expense_api.dart';
 import '../data/repositories/expense_repository.dart';
 import '../models/expense.dart';
+import 'auth_provider.dart';
 
 part 'expense_provider.g.dart';
 
@@ -23,7 +24,7 @@ Future<List<Expense>> expenses(ExpensesRef ref, {String? missionId}) async {
 
 @riverpod
 class ExpenseNotifier extends _$ExpenseNotifier {
-  late String _missionId;
+  String? _missionId;
 
   @override
   Future<List<Expense>> build(String? missionId) async {
@@ -73,7 +74,7 @@ class ExpenseNotifier extends _$ExpenseNotifier {
       await ref.read(expenseRepositoryProvider).deleteExpense(expenseId);
       state = const AsyncValue.loading();
       final updatedExpenses =
-          await ref.read(expenseRepositoryProvider).getExpenses(_missionId);
+          await ref.read(expenseRepositoryProvider).getExpenses(missionId: _missionId);
       state = AsyncValue.data(updatedExpenses);
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
