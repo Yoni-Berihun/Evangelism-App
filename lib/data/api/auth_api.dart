@@ -74,5 +74,35 @@ class AuthApi {
       await _apiClient.clearAuthTokens();
     }
   }
+
+  Future<List<Map<String, dynamic>>> getUserAccounts() async {
+    try {
+      final response = await _apiClient.dio.get('/v1/users/accounts');
+      return (response.data as List)
+          .map((json) => json as Map<String, dynamic>)
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to get user accounts: ${e.toString()}');
+    }
+  }
+
+  Future<Map<String, dynamic>> switchAccount(String accountId) async {
+    try {
+      final response = await _apiClient.dio.post('/v1/auth/switch-account/$accountId');
+      final data = response.data as Map<String, dynamic>;
+      
+      // Store new tokens
+      if (data.containsKey('access_token') && data.containsKey('refresh_token')) {
+        await _apiClient.setAuthTokens(
+          data['access_token'] as String,
+          data['refresh_token'] as String,
+        );
+      }
+      
+      return data;
+    } catch (e) {
+      throw Exception('Failed to switch account: ${e.toString()}');
+    }
+  }
 }
 

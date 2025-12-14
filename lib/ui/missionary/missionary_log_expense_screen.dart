@@ -6,6 +6,7 @@ import '../../core/utils/validators.dart';
 import '../../models/expense.dart';
 import '../../providers/mission_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/account_provider.dart';
 import '../../providers/expense_provider.dart';
 import '../widgets/success_dialog.dart';
 
@@ -226,7 +227,14 @@ class _MissionaryLogExpenseScreenState
       final mission = await ref.read(userMissionProvider.future);
       if (mission == null) return;
 
-      final accountId = ref.read(currentAccountIdProvider);
+      final accountIdAsync = ref.read(currentAccountIdProvider);
+      final accountId = await accountIdAsync.valueOrNull;
+      if (accountId == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No account selected')),
+        );
+        return;
+      }
       final user = ref.read(authNotifierProvider).valueOrNull;
       if (user == null) return;
 

@@ -1,5 +1,6 @@
 import '../api/auth_api.dart';
 import '../../models/user.dart';
+import '../../models/account.dart';
 
 class AuthRepository {
   final AuthApi _authApi;
@@ -30,6 +31,15 @@ class AuthRepository {
 
   Future<void> logout() async {
     await _authApi.logout();
+  }
+
+  Future<List<Account>> getUserAccounts() async {
+    final data = await _authApi.getUserAccounts();
+    return data.map((json) => Account.fromJson(json)).toList();
+  }
+
+  Future<void> switchAccount(String accountId) async {
+    await _authApi.switchAccount(accountId);
   }
 }
 

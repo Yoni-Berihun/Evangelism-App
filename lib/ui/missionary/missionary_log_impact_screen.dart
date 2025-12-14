@@ -305,7 +305,14 @@ class _MissionaryLogImpactScreenState
     final mission = await ref.read(userMissionProvider.future);
     if (mission == null) return;
 
-    final accountId = ref.read(currentAccountIdProvider);
+    final accountIdAsync = ref.read(currentAccountIdProvider);
+    final accountId = await accountIdAsync.valueOrNull;
+    if (accountId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No account selected')),
+      );
+      return;
+    }
     
     // Get current outreach numbers
     final currentNumbers = await ref.read(outreachNumbersProvider(mission.id).future);
