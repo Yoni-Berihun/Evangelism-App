@@ -4,6 +4,7 @@ import '../../core/constants/app_colors.dart';
 import '../../providers/mission_provider.dart';
 import '../../providers/outreach_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/account_provider.dart';
 import '../../data/repositories/outreach_repository.dart';
 import '../widgets/counter_button.dart';
 import '../widgets/success_dialog.dart';
