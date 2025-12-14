@@ -1,5 +1,6 @@
 import '../api_client.dart';
 import '../../models/mission.dart';
+import '../../core/constants/api_constants.dart';
 
 class MissionApi {
   final ApiClient _apiClient;
@@ -8,72 +9,65 @@ class MissionApi {
 
   Future<List<Mission>> getMissions(
     String accountId, {
-    DateTime? startDate,
-    DateTime? endDate,
+    int skip = 0,
+    int limit = 100,
   }) async {
     try {
-      final queryParams = <String, dynamic>{
-        'account_id': accountId,
-      };
-
-      if (startDate != null) {
-        queryParams['start_date'] = startDate.toIso8601String();
-      }
-      if (endDate != null) {
-        queryParams['end_date'] = endDate.toIso8601String();
-      }
-
       final response = await _apiClient.dio.get(
-        '/missions',
-        queryParameters: queryParams,
+        ApiConstants.missions,
+        queryParameters: {
+          'account_id': accountId,
+          'skip': skip,
+          'limit': limit,
+        },
       );
 
       return (response.data as List)
-          .map((json) => Mission.fromJson(json))
+          .map((json) => Mission.fromJson(json as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      throw Exception('Failed to fetch missions: $e');
+      throw Exception('Failed to fetch missions: ${e.toString()}');
     }
   }
 
-  Future<Mission> createMission(Mission mission) async {
+  Future<Mission> createMission(Map<String, dynamic> missionData) async {
     try {
       final response = await _apiClient.dio.post(
-        '/missions',
-        data: mission.toJson(),
+        ApiConstants.missions,
+        data: missionData,
       );
-      return Mission.fromJson(response.data);
+      return Mission.fromJson(response.data as Map<String, dynamic>);
     } catch (e) {
-      throw Exception('Failed to create mission: $e');
+      throw Exception('Failed to create mission: ${e.toString()}');
     }
   }
 
-  Future<Mission> updateMission(Mission mission) async {
+  Future<Mission> updateMission(String missionId, Map<String, dynamic> missionData) async {
     try {
       final response = await _apiClient.dio.put(
-        '/missions/${mission.id}',
-        data: mission.toJson(),
+        '${ApiConstants.missions}/$missionId',
+        data: missionData,
       );
-      return Mission.fromJson(response.data);
+      return Mission.fromJson(response.data as Map<String, dynamic>);
     } catch (e) {
-      throw Exception('Failed to update mission: $e');
+      throw Exception('Failed to update mission: ${e.toString()}');
     }
   }
 
   Future<void> deleteMission(String missionId) async {
     try {
-      await _apiClient.dio.delete('/missions/$missionId');
+      await _apiClient.dio.delete('${ApiConstants.missions}/$missionId');
     } catch (e) {
-      throw Exception('Failed to delete mission: $e');
+      throw Exception('Failed to delete mission: ${e.toString()}');
     }
   }
 
   Future<Mission> getMissionById(String missionId) async {
     try {
-      final response = await _apiClient.dio.get('/missions/$missionId');
-      return Mission.fromJson(response.data);
+      final response = await _apiClient.dio.get('${ApiConstants.missions}/$missionId');
+      return Mission.fromJson(response.data as Map<String, dynamic>);
     } catch (e) {
-      throw Exception('Failed to fetch mission: $e');
+      throw Exception('Failed to fetch mission: ${e.toString()}');
     }
   }
 }

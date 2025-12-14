@@ -7,16 +7,28 @@ class OutreachRepository {
 
   OutreachRepository(this._outreachApi);
 
-  Future<List<OutreachData>> getOutreachData(String missionId) async {
-    return await _outreachApi.getOutreachData(missionId);
+  Future<List<OutreachData>> getOutreachData({
+    String? missionId,
+    int skip = 0,
+    int limit = 100,
+  }) async {
+    return await _outreachApi.getOutreachData(
+      missionId: missionId,
+      skip: skip,
+      limit: limit,
+    );
   }
 
-  Future<OutreachData> createOutreachData(OutreachData data) async {
+  Future<OutreachData> createOutreachData(Map<String, dynamic> data) async {
     return await _outreachApi.createOutreachData(data);
   }
 
-  Future<List<OutreachNumber>> getOutreachNumbers(String missionId) async {
+  Future<OutreachNumber?> getOutreachNumbers(String missionId) async {
     return await _outreachApi.getOutreachNumbers(missionId);
+  }
+
+  Future<OutreachNumber> createOrUpdateOutreachNumbers(Map<String, dynamic> data) async {
+    return await _outreachApi.createOrUpdateOutreachNumbers(data);
   }
 }
 

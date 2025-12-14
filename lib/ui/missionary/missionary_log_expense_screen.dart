@@ -22,7 +22,15 @@ class _MissionaryLogExpenseScreenState
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
   final _descriptionController = TextEditingController();
-  ExpenseCategory _selectedCategory = ExpenseCategory.other;
+  String _selectedCategory = 'other';
+  
+  final List<String> _categories = [
+    'travel',
+    'food',
+    'supplies',
+    'accommodation',
+    'other',
+  ];
   DateTime _selectedDate = DateTime.now();
   bool _isSubmitted = false;
 
@@ -84,13 +92,13 @@ class _MissionaryLogExpenseScreenState
 
                   // Category
                   _buildCard(
-                    child: DropdownButtonFormField<ExpenseCategory>(
+                    child: DropdownButtonFormField<String>(
                       value: _selectedCategory,
                       decoration: const InputDecoration(
                         labelText: 'Category',
                         border: OutlineInputBorder(),
                       ),
-                      items: ExpenseCategory.values.map((category) {
+                      items: _categories.map((category) {
                         return DropdownMenuItem(
                           value: category,
                           child: Text(_getCategoryName(category)),
@@ -196,18 +204,20 @@ class _MissionaryLogExpenseScreenState
     );
   }
 
-  String _getCategoryName(ExpenseCategory category) {
+  String _getCategoryName(String category) {
     switch (category) {
-      case ExpenseCategory.travel:
+      case 'travel':
         return 'Travel';
-      case ExpenseCategory.food:
+      case 'food':
         return 'Food';
-      case ExpenseCategory.supplies:
+      case 'supplies':
         return 'Supplies';
-      case ExpenseCategory.accommodation:
+      case 'accommodation':
         return 'Accommodation';
-      case ExpenseCategory.other:
+      case 'other':
         return 'Other';
+      default:
+        return category;
     }
   }
 
@@ -220,23 +230,19 @@ class _MissionaryLogExpenseScreenState
       final user = ref.read(authNotifierProvider).valueOrNull;
       if (user == null) return;
 
-      final expense = Expense(
-        id: '',
-        accountId: accountId,
-        missionId: mission.id,
-        userId: user.id,
-        userName: user.fullName,
-        category: _selectedCategory,
-        amount: double.parse(_amountController.text),
-        description: _descriptionController.text,
-        date: _selectedDate,
-        createdAt: DateTime.now(),
-      );
+      final expenseData = <String, dynamic>{
+        'account_id': accountId,
+        'mission_id': mission.id,
+        'category': _selectedCategory,
+        'amount': double.parse(_amountController.text),
+        if (_descriptionController.text.isNotEmpty)
+          'description': _descriptionController.text,
+      };
 
       try {
         await ref
             .read(expenseNotifierProvider(mission.id).notifier)
-            .addExpense(expense);
+            .addExpense(expenseData);
 
         setState(() => _isSubmitted = true);
 

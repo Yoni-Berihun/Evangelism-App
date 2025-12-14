@@ -57,20 +57,26 @@ class MissionaryHomeScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      userMission.missionName,
+                      userMission.name,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Icon(Icons.location_on, size: 16),
-                        const SizedBox(width: 4),
-                        Text(userMission.location),
-                      ],
-                    ),
+                    if (userMission.location != null)
+                      Row(
+                        children: [
+                          const Icon(Icons.location_on, size: 16),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              userMission.location!['address'] as String? ?? 
+                              '${userMission.location!['latitude']}, ${userMission.location!['longitude']}',
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -82,15 +88,13 @@ class MissionaryHomeScreen extends ConsumerWidget {
                   Expanded(
                     child: StatCard(
                       value: ref
-                          .watch(outreachDataProvider(userMission.id))
+                          .watch(outreachNumbersProvider(userMission.id))
                           .when(
-                            data: (data) => data.fold<int>(
-                                    0, (sum, d) => sum + d.soulsSaved)
-                                .toString(),
+                            data: (numbers) => numbers?.saved.toString() ?? '0',
                             loading: () => '0',
                             error: (_, __) => '0',
                           ),
-                      label: 'Souls Saved',
+                      label: 'Saved',
                       color: AppColors.missionaryPrimary,
                     ),
                   ),
@@ -98,15 +102,13 @@ class MissionaryHomeScreen extends ConsumerWidget {
                   Expanded(
                     child: StatCard(
                       value: ref
-                          .watch(outreachDataProvider(userMission.id))
+                          .watch(outreachNumbersProvider(userMission.id))
                           .when(
-                            data: (data) => data.fold<int>(
-                                    0, (sum, d) => sum + d.baptisms)
-                                .toString(),
+                            data: (numbers) => numbers?.interested.toString() ?? '0',
                             loading: () => '0',
                             error: (_, __) => '0',
                           ),
-                      label: 'Baptisms',
+                      label: 'Interested',
                       color: AppColors.green,
                     ),
                   ),
@@ -117,14 +119,14 @@ class MissionaryHomeScreen extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: StatCard(
-                      value: '\$${ref.watch(expensesProvider(userMission.id)).when(
-                            data: (expenses) => expenses
+                      value: ref.watch(expensesProvider(missionId: userMission.id)).when(
+                            data: (expenses) => '\$${expenses
                                 .fold<double>(
                                     0.0, (sum, e) => sum + e.amount)
-                                .toStringAsFixed(0),
-                            loading: () => '0',
-                            error: (_, __) => '0',
-                          })}',
+                                .toStringAsFixed(0)}',
+                            loading: () => '\$0',
+                            error: (_, __) => '\$0',
+                          ),
                       label: 'Expenses',
                       color: AppColors.orange,
                     ),
@@ -133,7 +135,7 @@ class MissionaryHomeScreen extends ConsumerWidget {
                   Expanded(
                     child: StatCard(
                       value: ref
-                          .watch(outreachDataProvider(userMission.id))
+                          .watch(outreachDataProvider(missionId: userMission.id))
                           .when(
                             data: (data) => data.length.toString(),
                             loading: () => '0',
@@ -163,43 +165,53 @@ class MissionaryHomeScreen extends ConsumerWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: FlutterMap(
-                    options: MapOptions(
-                      center: LatLng(
-                          userMission.latitude, userMission.longitude),
-                      zoom: 10.0,
-                    ),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        subdomains: const ['a', 'b', 'c'],
-                        userAgentPackageName: 'com.example.evangelism_app',
-                      ),
-                      MarkerLayer(
-                        markers: [
-                          Marker(
-                            point: LatLng(
-                                userMission.latitude, userMission.longitude),
-                            width: 40,
-                            height: 40,
-                            builder: (context) => Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.missionaryPrimary,
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.white, width: 3),
-                              ),
-                              child: const Icon(
-                                Icons.location_on,
-                                color: Colors.white,
-                              ),
+                  child: userMission.location != null &&
+                          userMission.location!['latitude'] != null &&
+                          userMission.location!['longitude'] != null
+                      ? FlutterMap(
+                          options: MapOptions(
+                            initialCenter: LatLng(
+                              (userMission.location!['latitude'] as num).toDouble(),
+                              (userMission.location!['longitude'] as num).toDouble(),
                             ),
+                            initialZoom: 10.0,
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                          children: [
+                            TileLayer(
+                              urlTemplate:
+                                  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              subdomains: const ['a', 'b', 'c'],
+                              userAgentPackageName: 'com.example.evangelism_app',
+                            ),
+                            MarkerLayer(
+                              markers: [
+                                Marker(
+                                  point: LatLng(
+                                    (userMission.location!['latitude'] as num).toDouble(),
+                                    (userMission.location!['longitude'] as num).toDouble(),
+                                  ),
+                                  width: 40,
+                                  height: 40,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.missionaryPrimary,
+                                      shape: BoxShape.circle,
+                                      border:
+                                          Border.all(color: Colors.white, width: 3),
+                                    ),
+                                    child: const Icon(
+                                      Icons.location_on,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      : const Center(
+                          child: Text('Location not available'),
+                        ),
                 ),
               ),
             ],

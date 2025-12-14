@@ -5,6 +5,7 @@ import '../../core/constants/api_constants.dart';
 class ApiClient {
   final Dio _dio;
   static const String baseUrl = ApiConstants.baseUrl;
+  bool _isRefreshing = false;
 
   ApiClient()
       : _dio = Dio(BaseOptions(
@@ -30,8 +31,28 @@ class ApiClient {
         }
         return handler.next(options);
       },
-      onError: (error, handler) {
-        // Handle errors globally
+      onError: (error, handler) async {
+        // Handle 401 errors by attempting token refresh
+        if (error.response?.statusCode == 401 && !_isRefreshing) {
+          _isRefreshing = true;
+          try {
+            final refreshed = await _refreshToken();
+            if (refreshed) {
+              // Retry the original request
+              final token = await _getAuthToken();
+              if (token != null) {
+                error.requestOptions.headers['Authorization'] = 'Bearer $token';
+                final response = await _dio.fetch(error.requestOptions);
+                _isRefreshing = false;
+                return handler.resolve(response);
+              }
+            }
+          } catch (e) {
+            // Refresh failed, clear tokens
+            await clearAuthTokens();
+          }
+          _isRefreshing = false;
+        }
         return handler.next(error);
       },
     ));
@@ -40,20 +61,55 @@ class ApiClient {
   Future<String?> _getAuthToken() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      return prefs.getString('auth_token');
+      return prefs.getString('access_token');
     } catch (e) {
       return null;
     }
   }
 
-  Future<void> setAuthToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('auth_token', token);
+  Future<String?> _getRefreshToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString('refresh_token');
+    } catch (e) {
+      return null;
+    }
   }
 
-  Future<void> clearAuthToken() async {
+  Future<bool> _refreshToken() async {
+    try {
+      final refreshToken = await _getRefreshToken();
+      if (refreshToken == null) return false;
+
+      final response = await _dio.post(
+        ApiConstants.refresh,
+        data: {'refresh_token': refreshToken},
+      );
+
+      final data = response.data as Map<String, dynamic>;
+      if (data.containsKey('access_token')) {
+        await setAuthTokens(
+          data['access_token'] as String,
+          data['refresh_token'] as String? ?? refreshToken,
+        );
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> setAuthTokens(String accessToken, String refreshToken) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('auth_token');
+    await prefs.setString('access_token', accessToken);
+    await prefs.setString('refresh_token', refreshToken);
+  }
+
+  Future<void> clearAuthTokens() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('access_token');
+    await prefs.remove('refresh_token');
   }
 
   Dio get dio => _dio;

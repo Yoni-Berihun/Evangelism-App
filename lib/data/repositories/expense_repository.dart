@@ -6,16 +6,24 @@ class ExpenseRepository {
 
   ExpenseRepository(this._expenseApi);
 
-  Future<List<Expense>> getExpenses(String missionId) async {
-    return await _expenseApi.getExpenses(missionId);
+  Future<List<Expense>> getExpenses({
+    String? missionId,
+    int skip = 0,
+    int limit = 100,
+  }) async {
+    return await _expenseApi.getExpenses(
+      missionId: missionId,
+      skip: skip,
+      limit: limit,
+    );
   }
 
-  Future<Expense> createExpense(Expense expense) async {
-    return await _expenseApi.createExpense(expense);
+  Future<Expense> createExpense(Map<String, dynamic> expenseData) async {
+    return await _expenseApi.createExpense(expenseData);
   }
 
-  Future<Expense> updateExpense(Expense expense) async {
-    return await _expenseApi.updateExpense(expense);
+  Future<Expense> updateExpense(String expenseId, Map<String, dynamic> expenseData) async {
+    return await _expenseApi.updateExpense(expenseId, expenseData);
   }
 
   Future<void> deleteExpense(String expenseId) async {

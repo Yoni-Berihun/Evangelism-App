@@ -8,22 +8,22 @@ class MissionRepository {
 
   Future<List<Mission>> getMissions(
     String accountId, {
-    DateTime? startDate,
-    DateTime? endDate,
+    int skip = 0,
+    int limit = 100,
   }) async {
     return await _missionApi.getMissions(
       accountId,
-      startDate: startDate,
-      endDate: endDate,
+      skip: skip,
+      limit: limit,
     );
   }
 
-  Future<Mission> createMission(Mission mission) async {
-    return await _missionApi.createMission(mission);
+  Future<Mission> createMission(Map<String, dynamic> missionData) async {
+    return await _missionApi.createMission(missionData);
   }
 
-  Future<Mission> updateMission(Mission mission) async {
-    return await _missionApi.updateMission(mission);
+  Future<Mission> updateMission(String missionId, Map<String, dynamic> missionData) async {
+    return await _missionApi.updateMission(missionId, missionData);
   }
 
   Future<void> deleteMission(String missionId) async {

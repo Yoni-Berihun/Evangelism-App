@@ -27,7 +27,7 @@ class MissionDetailCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  mission.missionName,
+                  mission.name,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -41,22 +41,25 @@ class MissionDetailCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          _buildInfoRow(Icons.location_on, mission.location),
-          const SizedBox(height: 8),
-          _buildInfoRow(Icons.group, mission.teamName),
-          const SizedBox(height: 8),
-          _buildInfoRow(
-            Icons.calendar_today,
-            '${DateUtils.formatDate(mission.startDate)} - ${DateUtils.formatDate(mission.endDate)}',
-          ),
-          const SizedBox(height: 8),
-          _buildInfoRow(
-            Icons.attach_money,
-            '\$${mission.budget.toStringAsFixed(2)}',
-          ),
-          if (mission.assignedMissionaryName != null) ...[
+          if (mission.location != null) ...[
+            _buildInfoRow(
+              Icons.location_on,
+              _formatLocation(mission.location!),
+            ),
             const SizedBox(height: 8),
-            _buildInfoRow(Icons.person, mission.assignedMissionaryName!),
+          ],
+          if (mission.startDate != null && mission.endDate != null) ...[
+            _buildInfoRow(
+              Icons.calendar_today,
+              '${_formatDate(mission.startDate!)} - ${_formatDate(mission.endDate!)}',
+            ),
+            const SizedBox(height: 8),
+          ],
+          if (mission.budget != null) ...[
+            _buildInfoRow(
+              Icons.attach_money,
+              '\$${mission.budget!.toStringAsFixed(2)}',
+            ),
           ],
         ],
       ),
@@ -79,6 +82,25 @@ class MissionDetailCard extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String _formatLocation(Map<String, dynamic> location) {
+    if (location.containsKey('address')) {
+      return location['address'] as String;
+    }
+    if (location.containsKey('latitude') && location.containsKey('longitude')) {
+      return '${location['latitude']}, ${location['longitude']}';
+    }
+    return 'Location specified';
+  }
+
+  String _formatDate(String dateString) {
+    try {
+      final date = DateTime.parse(dateString);
+      return DateUtils.formatDate(date);
+    } catch (e) {
+      return dateString;
+    }
   }
 }
 

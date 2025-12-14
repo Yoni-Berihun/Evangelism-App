@@ -33,7 +33,7 @@ class AuthNotifier extends _$AuthNotifier {
   Future<void> _checkAuthStatus() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('auth_token');
+      final token = prefs.getString('access_token');
 
       if (token != null) {
         try {

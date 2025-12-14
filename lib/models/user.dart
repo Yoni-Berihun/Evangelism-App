@@ -8,12 +8,11 @@ class User with _$User {
   const factory User({
     required String id,
     required String email,
-    required String fullName,
-    String? phoneNumber,
-    String? profilePictureUrl,
-    String? role,
-    required DateTime createdAt,
-    DateTime? updatedAt,
+    @JsonKey(name: 'full_name') required String fullName,
+    @JsonKey(name: 'phone_number') String? phoneNumber,
+    @JsonKey(name: 'is_active') required bool isActive,
+    @JsonKey(name: 'created_at') required String createdAt,
+    String? role, // Not from backend, used for UI role switching
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

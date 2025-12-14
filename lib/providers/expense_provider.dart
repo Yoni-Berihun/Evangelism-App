@@ -17,8 +17,8 @@ ExpenseRepository expenseRepository(ExpenseRepositoryRef ref) {
 }
 
 @riverpod
-Future<List<Expense>> expenses(ExpensesRef ref, String missionId) async {
-  return ref.read(expenseRepositoryProvider).getExpenses(missionId);
+Future<List<Expense>> expenses(ExpensesRef ref, {String? missionId}) async {
+  return ref.read(expenseRepositoryProvider).getExpenses(missionId: missionId);
 }
 
 @riverpod
@@ -26,28 +26,28 @@ class ExpenseNotifier extends _$ExpenseNotifier {
   late String _missionId;
 
   @override
-  Future<List<Expense>> build(String missionId) async {
+  Future<List<Expense>> build(String? missionId) async {
     _missionId = missionId;
-    return ref.read(expenseRepositoryProvider).getExpenses(missionId);
+    return ref.read(expenseRepositoryProvider).getExpenses(missionId: missionId);
   }
 
   Future<void> refresh() async {
     state = const AsyncValue.loading();
     try {
       final expenses =
-          await ref.read(expenseRepositoryProvider).getExpenses(_missionId);
+          await ref.read(expenseRepositoryProvider).getExpenses(missionId: _missionId);
       state = AsyncValue.data(expenses);
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
     }
   }
 
-  Future<void> addExpense(Expense expense) async {
+  Future<void> addExpense(Map<String, dynamic> expenseData) async {
     try {
-      await ref.read(expenseRepositoryProvider).createExpense(expense);
+      await ref.read(expenseRepositoryProvider).createExpense(expenseData);
       state = const AsyncValue.loading();
       final updatedExpenses =
-          await ref.read(expenseRepositoryProvider).getExpenses(_missionId);
+          await ref.read(expenseRepositoryProvider).getExpenses(missionId: _missionId);
       state = AsyncValue.data(updatedExpenses);
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
@@ -55,12 +55,12 @@ class ExpenseNotifier extends _$ExpenseNotifier {
     }
   }
 
-  Future<void> updateExpense(Expense expense) async {
+  Future<void> updateExpense(String expenseId, Map<String, dynamic> expenseData) async {
     try {
-      await ref.read(expenseRepositoryProvider).updateExpense(expense);
+      await ref.read(expenseRepositoryProvider).updateExpense(expenseId, expenseData);
       state = const AsyncValue.loading();
       final updatedExpenses =
-          await ref.read(expenseRepositoryProvider).getExpenses(_missionId);
+          await ref.read(expenseRepositoryProvider).getExpenses(missionId: _missionId);
       state = AsyncValue.data(updatedExpenses);
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);

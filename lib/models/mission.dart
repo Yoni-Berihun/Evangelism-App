@@ -7,18 +7,16 @@ part 'mission.g.dart';
 class Mission with _$Mission {
   const factory Mission({
     required String id,
-    required String accountId,
-    required String missionName,
-    required String location,
-    required double latitude,
-    required double longitude,
-    required String teamName,
-    required DateTime startDate,
-    required DateTime endDate,
-    required double budget,
-    String? assignedMissionaryId,
-    String? assignedMissionaryName,
-    required DateTime createdAt,
+    @JsonKey(name: 'account_id') required String accountId,
+    required String name,
+    @JsonKey(name: 'start_date') String? startDate,
+    @JsonKey(name: 'end_date') String? endDate,
+    Map<String, dynamic>? location, // JSON object with lat/lng
+    double? budget,
+    @JsonKey(name: 'created_by') required String createdBy,
+    @JsonKey(name: 'deleted_at') String? deletedAt,
+    @JsonKey(name: 'created_at') required String createdAt,
+    @JsonKey(name: 'updated_at') required String updatedAt,
   }) = _Mission;
 
   factory Mission.fromJson(Map<String, dynamic> json) =>

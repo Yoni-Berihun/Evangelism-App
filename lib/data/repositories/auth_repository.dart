@@ -8,12 +8,20 @@ class AuthRepository {
 
   Future<User> login(String email, String password) async {
     final data = await _authApi.login(email, password);
-    // Assuming the API returns user data in the response
-    return User.fromJson(data['user'] ?? data);
+    // Backend returns AuthResponse with nested user object
+    if (data.containsKey('user')) {
+      return User.fromJson(data['user'] as Map<String, dynamic>);
+    }
+    throw Exception('Invalid response format: user not found');
   }
 
   Future<User> register(Map<String, dynamic> userData) async {
-    return await _authApi.register(userData);
+    final data = await _authApi.register(userData);
+    // Backend returns AuthResponse with nested user object
+    if (data.containsKey('user')) {
+      return User.fromJson(data['user'] as Map<String, dynamic>);
+    }
+    throw Exception('Invalid response format: user not found');
   }
 
   Future<User> getCurrentUser() async {

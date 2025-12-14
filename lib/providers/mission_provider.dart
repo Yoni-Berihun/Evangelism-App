@@ -38,9 +38,9 @@ class MissionNotifier extends _$MissionNotifier {
     }
   }
 
-  Future<void> addMission(Mission mission) async {
+  Future<void> addMission(Map<String, dynamic> missionData) async {
     try {
-      await ref.read(missionRepositoryProvider).createMission(mission);
+      await ref.read(missionRepositoryProvider).createMission(missionData);
       await refresh();
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
@@ -48,9 +48,9 @@ class MissionNotifier extends _$MissionNotifier {
     }
   }
 
-  Future<void> updateMission(Mission mission) async {
+  Future<void> updateMission(String missionId, Map<String, dynamic> missionData) async {
     try {
-      await ref.read(missionRepositoryProvider).updateMission(mission);
+      await ref.read(missionRepositoryProvider).updateMission(missionId, missionData);
       await refresh();
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
@@ -76,14 +76,9 @@ Future<Mission?> userMission(UserMissionRef ref) async {
   if (user == null) return null;
 
   final missions = await ref.watch(missionNotifierProvider.future);
-  try {
-    return missions.firstWhere(
-      (mission) => mission.assignedMissionaryId == user.id,
-    );
-  } catch (e) {
-    // Return first mission if no specific assignment or empty list
-    return missions.isNotEmpty ? missions.first : null;
-  }
+  // Backend doesn't have assignedMissionaryId field, return first mission for now
+  // In production, you'd filter by mission_user relationship
+  return missions.isNotEmpty ? missions.first : null;
 }
 
 @riverpod

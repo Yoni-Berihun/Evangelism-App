@@ -4,9 +4,10 @@ import '../../core/constants/app_colors.dart';
 import '../../providers/mission_provider.dart';
 import '../../providers/outreach_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../data/repositories/outreach_repository.dart';
 import '../widgets/counter_button.dart';
 import '../widgets/success_dialog.dart';
-import '../../models/outreach_data.dart';
+import '../../models/outreach_number.dart';
 
 class MissionaryLogImpactScreen extends ConsumerStatefulWidget {
   const MissionaryLogImpactScreen({Key? key}) : super(key: key);
@@ -119,7 +120,7 @@ class _MissionaryLogImpactScreenState
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Mission: ${mission.missionName}',
+                  'Mission: ${mission.name}',
                   style:
                       const TextStyle(fontSize: 14, color: AppColors.textSecondary),
                 ),
@@ -305,29 +306,33 @@ class _MissionaryLogImpactScreenState
     if (mission == null) return;
 
     final accountId = ref.read(currentAccountIdProvider);
-    final user = ref.read(authNotifierProvider).valueOrNull;
-    if (user == null) return;
-
-    final outreachData = OutreachData(
-      id: '',
-      accountId: accountId,
-      missionId: mission.id,
-      userId: user.id,
-      userName: user.fullName,
-      soulsSaved: _soulsSaved,
-      baptisms: _baptisms,
-      testimonies:
-          _testimoniesController.text.trim().isEmpty
-              ? null
-              : _testimoniesController.text,
-      date: DateTime.now(),
-      createdAt: DateTime.now(),
-    );
+    
+    // Get current outreach numbers
+    final currentNumbers = await ref.read(outreachNumbersProvider(mission.id).future);
+    
+    // Update outreach numbers - backend will create or update
+    final numbersData = <String, dynamic>{
+      'account_id': accountId,
+      'mission_id': mission.id,
+      'saved': (currentNumbers?.saved ?? 0) + _soulsSaved,
+      'interested': (currentNumbers?.interested ?? 0) + _baptisms, // Using baptisms as interested for now
+      'heared': currentNumbers?.heared ?? 0,
+    };
 
     try {
-      await ref
-          .read(outreachNotifierProvider(mission.id).notifier)
-          .addOutreachData(outreachData);
+      final outreachRepo = ref.read(outreachRepositoryProvider);
+      await outreachRepo.createOrUpdateOutreachNumbers(numbersData);
+      
+      // If there's a testimony, create outreach data entry
+      if (_testimoniesController.text.trim().isNotEmpty) {
+        final outreachData = <String, dynamic>{
+          'account_id': accountId,
+          'mission_id': mission.id,
+          'full_name': 'Testimony Entry',
+          'status': 'saved',
+        };
+        await outreachRepo.createOutreachData(outreachData);
+      }
 
       setState(() => _isSubmitted = true);
 

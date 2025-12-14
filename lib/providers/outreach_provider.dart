@@ -19,12 +19,12 @@ OutreachRepository outreachRepository(OutreachRepositoryRef ref) {
 
 @riverpod
 Future<List<OutreachData>> outreachData(
-    OutreachDataRef ref, String missionId) async {
-  return ref.read(outreachRepositoryProvider).getOutreachData(missionId);
+    OutreachDataRef ref, {String? missionId}) async {
+  return ref.read(outreachRepositoryProvider).getOutreachData(missionId: missionId);
 }
 
 @riverpod
-Future<List<OutreachNumber>> outreachNumbers(
+Future<OutreachNumber?> outreachNumbers(
     OutreachNumbersRef ref, String missionId) async {
   return ref.read(outreachRepositoryProvider).getOutreachNumbers(missionId);
 }
@@ -34,28 +34,28 @@ class OutreachNotifier extends _$OutreachNotifier {
   late String _missionId;
 
   @override
-  Future<List<OutreachData>> build(String missionId) async {
+  Future<List<OutreachData>> build(String? missionId) async {
     _missionId = missionId;
-    return ref.read(outreachRepositoryProvider).getOutreachData(missionId);
+    return ref.read(outreachRepositoryProvider).getOutreachData(missionId: missionId);
   }
 
   Future<void> refresh() async {
     state = const AsyncValue.loading();
     try {
       final data =
-          await ref.read(outreachRepositoryProvider).getOutreachData(_missionId);
+          await ref.read(outreachRepositoryProvider).getOutreachData(missionId: _missionId);
       state = AsyncValue.data(data);
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
     }
   }
 
-  Future<void> addOutreachData(OutreachData data) async {
+  Future<void> addOutreachData(Map<String, dynamic> data) async {
     try {
       await ref.read(outreachRepositoryProvider).createOutreachData(data);
       state = const AsyncValue.loading();
       final updatedData =
-          await ref.read(outreachRepositoryProvider).getOutreachData(_missionId);
+          await ref.read(outreachRepositoryProvider).getOutreachData(missionId: _missionId);
       state = AsyncValue.data(updatedData);
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
@@ -67,13 +67,25 @@ class OutreachNotifier extends _$OutreachNotifier {
 @riverpod
 Future<Map<String, dynamic>> missionStats(
     MissionStatsRef ref, String missionId) async {
-  final outreachData = await ref.watch(outreachDataProvider(missionId).future);
+  final outreachData = await ref.watch(outreachDataProvider(missionId: missionId).future);
+  final outreachNumbers = await ref.watch(outreachNumbersProvider(missionId).future);
+
+  // Calculate stats from outreach numbers if available
+  int totalSaved = 0;
+  int totalInterested = 0;
+  int totalHeared = 0;
+  
+  if (outreachNumbers != null) {
+    totalSaved = outreachNumbers.saved;
+    totalInterested = outreachNumbers.interested;
+    totalHeared = outreachNumbers.heared;
+  }
 
   return {
-    'totalSouls': outreachData.fold(0, (sum, data) => sum + data.soulsSaved),
-    'totalBaptisms':
-        outreachData.fold(0, (sum, data) => sum + data.baptisms),
-    'testimoniesCount': outreachData.where((d) => d.testimonies != null).length,
+    'totalSaved': totalSaved,
+    'totalInterested': totalInterested,
+    'totalHeared': totalHeared,
+    'contactsCount': outreachData.length,
   };
 }
 
