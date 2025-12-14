@@ -13,10 +13,10 @@ _$AccountImpl _$$AccountImplFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String?,
       phoneNumber: json['phone_number'] as String?,
       location: json['location'] as String?,
-      createdBy: json['created_by'] as String,
-      isActive: json['is_active'] as bool,
-      createdAt: json['created_at'] as String,
-      updatedAt: json['updated_at'] as String,
+      createdBy: json['created_by'] as String?,
+      isActive: json['is_active'] as bool?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
     );
 
 Map<String, dynamic> _$$AccountImplToJson(_$AccountImpl instance) =>

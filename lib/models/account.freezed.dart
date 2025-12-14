@@ -29,13 +29,13 @@ mixin _$Account {
   String? get phoneNumber => throw _privateConstructorUsedError;
   String? get location => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_by')
-  String get createdBy => throw _privateConstructorUsedError;
+  String? get createdBy => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_active')
-  bool get isActive => throw _privateConstructorUsedError;
+  bool? get isActive => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
-  String get createdAt => throw _privateConstructorUsedError;
+  String? get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
-  String get updatedAt => throw _privateConstructorUsedError;
+  String? get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this Account to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -57,10 +57,10 @@ abstract class $AccountCopyWith<$Res> {
     String? email,
     @JsonKey(name: 'phone_number') String? phoneNumber,
     String? location,
-    @JsonKey(name: 'created_by') String createdBy,
-    @JsonKey(name: 'is_active') bool isActive,
-    @JsonKey(name: 'created_at') String createdAt,
-    @JsonKey(name: 'updated_at') String updatedAt,
+    @JsonKey(name: 'created_by') String? createdBy,
+    @JsonKey(name: 'is_active') bool? isActive,
+    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'updated_at') String? updatedAt,
   });
 }
 
@@ -84,10 +84,10 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
     Object? email = freezed,
     Object? phoneNumber = freezed,
     Object? location = freezed,
-    Object? createdBy = null,
-    Object? isActive = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
+    Object? createdBy = freezed,
+    Object? isActive = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -111,22 +111,22 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
                 ? _value.location
                 : location // ignore: cast_nullable_to_non_nullable
                       as String?,
-            createdBy: null == createdBy
+            createdBy: freezed == createdBy
                 ? _value.createdBy
                 : createdBy // ignore: cast_nullable_to_non_nullable
-                      as String,
-            isActive: null == isActive
+                      as String?,
+            isActive: freezed == isActive
                 ? _value.isActive
                 : isActive // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            createdAt: null == createdAt
+                      as bool?,
+            createdAt: freezed == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
-                      as String,
-            updatedAt: null == updatedAt
+                      as String?,
+            updatedAt: freezed == updatedAt
                 ? _value.updatedAt
                 : updatedAt // ignore: cast_nullable_to_non_nullable
-                      as String,
+                      as String?,
           )
           as $Val,
     );
@@ -147,10 +147,10 @@ abstract class _$$AccountImplCopyWith<$Res> implements $AccountCopyWith<$Res> {
     String? email,
     @JsonKey(name: 'phone_number') String? phoneNumber,
     String? location,
-    @JsonKey(name: 'created_by') String createdBy,
-    @JsonKey(name: 'is_active') bool isActive,
-    @JsonKey(name: 'created_at') String createdAt,
-    @JsonKey(name: 'updated_at') String updatedAt,
+    @JsonKey(name: 'created_by') String? createdBy,
+    @JsonKey(name: 'is_active') bool? isActive,
+    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'updated_at') String? updatedAt,
   });
 }
 
@@ -173,10 +173,10 @@ class __$$AccountImplCopyWithImpl<$Res>
     Object? email = freezed,
     Object? phoneNumber = freezed,
     Object? location = freezed,
-    Object? createdBy = null,
-    Object? isActive = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
+    Object? createdBy = freezed,
+    Object? isActive = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _$AccountImpl(
@@ -200,22 +200,22 @@ class __$$AccountImplCopyWithImpl<$Res>
             ? _value.location
             : location // ignore: cast_nullable_to_non_nullable
                   as String?,
-        createdBy: null == createdBy
+        createdBy: freezed == createdBy
             ? _value.createdBy
             : createdBy // ignore: cast_nullable_to_non_nullable
-                  as String,
-        isActive: null == isActive
+                  as String?,
+        isActive: freezed == isActive
             ? _value.isActive
             : isActive // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        createdAt: null == createdAt
+                  as bool?,
+        createdAt: freezed == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
-                  as String,
-        updatedAt: null == updatedAt
+                  as String?,
+        updatedAt: freezed == updatedAt
             ? _value.updatedAt
             : updatedAt // ignore: cast_nullable_to_non_nullable
-                  as String,
+                  as String?,
       ),
     );
   }
@@ -230,10 +230,10 @@ class _$AccountImpl implements _Account {
     this.email,
     @JsonKey(name: 'phone_number') this.phoneNumber,
     this.location,
-    @JsonKey(name: 'created_by') required this.createdBy,
-    @JsonKey(name: 'is_active') required this.isActive,
-    @JsonKey(name: 'created_at') required this.createdAt,
-    @JsonKey(name: 'updated_at') required this.updatedAt,
+    @JsonKey(name: 'created_by') this.createdBy,
+    @JsonKey(name: 'is_active') this.isActive,
+    @JsonKey(name: 'created_at') this.createdAt,
+    @JsonKey(name: 'updated_at') this.updatedAt,
   });
 
   factory _$AccountImpl.fromJson(Map<String, dynamic> json) =>
@@ -253,16 +253,16 @@ class _$AccountImpl implements _Account {
   final String? location;
   @override
   @JsonKey(name: 'created_by')
-  final String createdBy;
+  final String? createdBy;
   @override
   @JsonKey(name: 'is_active')
-  final bool isActive;
+  final bool? isActive;
   @override
   @JsonKey(name: 'created_at')
-  final String createdAt;
+  final String? createdAt;
   @override
   @JsonKey(name: 'updated_at')
-  final String updatedAt;
+  final String? updatedAt;
 
   @override
   String toString() {
@@ -328,10 +328,10 @@ abstract class _Account implements Account {
     final String? email,
     @JsonKey(name: 'phone_number') final String? phoneNumber,
     final String? location,
-    @JsonKey(name: 'created_by') required final String createdBy,
-    @JsonKey(name: 'is_active') required final bool isActive,
-    @JsonKey(name: 'created_at') required final String createdAt,
-    @JsonKey(name: 'updated_at') required final String updatedAt,
+    @JsonKey(name: 'created_by') final String? createdBy,
+    @JsonKey(name: 'is_active') final bool? isActive,
+    @JsonKey(name: 'created_at') final String? createdAt,
+    @JsonKey(name: 'updated_at') final String? updatedAt,
   }) = _$AccountImpl;
 
   factory _Account.fromJson(Map<String, dynamic> json) = _$AccountImpl.fromJson;
@@ -350,16 +350,16 @@ abstract class _Account implements Account {
   String? get location;
   @override
   @JsonKey(name: 'created_by')
-  String get createdBy;
+  String? get createdBy;
   @override
   @JsonKey(name: 'is_active')
-  bool get isActive;
+  bool? get isActive;
   @override
   @JsonKey(name: 'created_at')
-  String get createdAt;
+  String? get createdAt;
   @override
   @JsonKey(name: 'updated_at')
-  String get updatedAt;
+  String? get updatedAt;
 
   /// Create a copy of Account
   /// with the given fields replaced by the non-null parameter values.

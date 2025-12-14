@@ -12,8 +12,11 @@ import '../widgets/mission_detail_card.dart';
 import '../widgets/account_switcher.dart';
 import 'admin_add_mission_screen.dart';
 
+import '../../models/account.dart';
+
 class AdminHomeScreen extends ConsumerWidget {
-  const AdminHomeScreen({Key? key}) : super(key: key);
+  final Account? account;
+  const AdminHomeScreen({Key? key, this.account}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,12 +60,23 @@ class AdminHomeScreen extends ConsumerWidget {
                       ),
                     );
                   }).toList(),
-                  loading: () => <Marker>[],
+                  loading: () => <Marker>[], // Keep empty markers but handled below
                   error: (_, __) => <Marker>[],
                 ),
               ),
             ],
           ),
+          
+          // Loading Indicator
+          if (missions.isLoading)
+             const Center(
+               child: Card(
+                 child: Padding(
+                   padding: EdgeInsets.all(16.0),
+                   child: CircularProgressIndicator(),
+                 ),
+               ),
+             ),
 
           // Top Filter Bar
           Positioned(

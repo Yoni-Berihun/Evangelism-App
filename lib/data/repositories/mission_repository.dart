@@ -33,5 +33,9 @@ class MissionRepository {
   Future<Mission> getMissionById(String missionId) async {
     return await _missionApi.getMissionById(missionId);
   }
+
+  Future<void> inviteMissionary(String accountId, String name, String email) async {
+    await _missionApi.inviteMissionary(accountId, name, email);
+  }
 }
 

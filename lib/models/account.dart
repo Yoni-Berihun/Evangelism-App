@@ -11,10 +11,10 @@ class Account with _$Account {
     String? email,
     @JsonKey(name: 'phone_number') String? phoneNumber,
     String? location,
-    @JsonKey(name: 'created_by') required String createdBy,
-    @JsonKey(name: 'is_active') required bool isActive,
-    @JsonKey(name: 'created_at') required String createdAt,
-    @JsonKey(name: 'updated_at') required String updatedAt,
+    @JsonKey(name: 'created_by') String? createdBy,
+    @JsonKey(name: 'is_active') bool? isActive,
+    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'updated_at') String? updatedAt,
   }) = _Account;
 
   factory Account.fromJson(Map<String, dynamic> json) =>

@@ -42,6 +42,17 @@ class AccountNotifier extends _$AccountNotifier {
       rethrow;
     }
   }
+
+  Future<void> createAccount(Map<String, dynamic> data) async {
+    try {
+      await ref.read(authRepositoryProvider).createAccount(data);
+      // Refresh to show the new account
+      await refresh();
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+      rethrow;
+    }
+  }
 }
 
 @riverpod

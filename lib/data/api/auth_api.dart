@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'api_client.dart';
 import '../../models/user.dart';
 import '../../core/constants/api_constants.dart';
@@ -77,18 +78,22 @@ class AuthApi {
 
   Future<List<Map<String, dynamic>>> getUserAccounts() async {
     try {
-      final response = await _apiClient.dio.get('/v1/users/accounts');
+      final response = await _apiClient.dio.get(ApiConstants.accounts);
       return (response.data as List)
           .map((json) => json as Map<String, dynamic>)
           .toList();
     } catch (e) {
+      print('DEBUG: getUserAccounts error: $e');
+      if (e is DioException) {
+         print('DEBUG: Response data: ${e.response?.data}');
+      }
       throw Exception('Failed to get user accounts: ${e.toString()}');
     }
   }
 
   Future<Map<String, dynamic>> switchAccount(String accountId) async {
     try {
-      final response = await _apiClient.dio.post('/v1/auth/switch-account/$accountId');
+      final response = await _apiClient.dio.post('${ApiConstants.switchAccount}/$accountId');
       final data = response.data as Map<String, dynamic>;
       
       // Store new tokens
@@ -102,6 +107,15 @@ class AuthApi {
       return data;
     } catch (e) {
       throw Exception('Failed to switch account: ${e.toString()}');
+    }
+  }
+
+  Future<Map<String, dynamic>> createAccount(Map<String, dynamic> data) async {
+    try {
+      final response = await _apiClient.dio.post(ApiConstants.accounts, data: data);
+      return response.data as Map<String, dynamic>;
+    } catch (e) {
+      throw Exception('Failed to create account: ${e.toString()}');
     }
   }
 }

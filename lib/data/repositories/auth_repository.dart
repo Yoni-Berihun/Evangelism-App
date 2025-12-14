@@ -41,5 +41,10 @@ class AuthRepository {
   Future<void> switchAccount(String accountId) async {
     await _authApi.switchAccount(accountId);
   }
+
+  Future<Account> createAccount(Map<String, dynamic> data) async {
+    final response = await _authApi.createAccount(data);
+    return Account.fromJson(response);
+  }
 }
 

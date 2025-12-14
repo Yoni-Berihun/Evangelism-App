@@ -19,6 +19,9 @@ MissionRepository missionRepository(MissionRepositoryRef ref) {
   return MissionRepository(ref.watch(missionApiProvider));
 }
 
+// MissionRepository and MissionApi providers setup
+
+
 @riverpod
 class MissionNotifier extends _$MissionNotifier {
   @override
@@ -75,6 +78,24 @@ class MissionNotifier extends _$MissionNotifier {
       rethrow;
     }
   }
+
+  Future<void> inviteMissionary(String name, String email) async {
+    try {
+      final accountIdAsync = ref.read(currentAccountIdProvider);
+      final accountId = await accountIdAsync.valueOrNull;
+      
+      if (accountId == null) {
+        throw Exception('No account selected');
+      }
+
+      await ref.read(missionRepositoryProvider).inviteMissionary(accountId, name, email);
+      // In a real app, you might refresh the missionary list here
+      ref.invalidate(missionariesProvider);
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+      rethrow;
+    }
+  }
 }
 
 @riverpod
@@ -95,9 +116,26 @@ Future<List<User>> missionaries(MissionariesRef ref) async {
   // For now, return empty list - will be implemented with user API
   // In production, this would fetch users with role='missionary' from the backend
   try {
-    // TODO: Implement user API to fetch missionaries
-    // final response = await ref.read(userApiProvider).getUsers(accountId, role: 'missionary');
-    return [];
+    // Mock data for demonstration
+    await Future.delayed(const Duration(milliseconds: 500));
+    return [
+      const User(
+        id: '1',
+        email: 'john.doe@example.com',
+        fullName: 'John Doe',
+        isActive: true,
+        createdAt: '2023-01-01',
+        role: 'missionary',
+      ),
+      const User(
+        id: '2',
+        email: 'jane.smith@example.com',
+        fullName: 'Jane Smith',
+        isActive: true,
+        createdAt: '2023-01-02',
+        role: 'missionary',
+      ),
+    ];
   } catch (e) {
     return [];
   }

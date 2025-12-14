@@ -23,7 +23,7 @@ final currentAccountIdProvider = AutoDisposeFutureProvider<String?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentAccountIdRef = AutoDisposeFutureProviderRef<String?>;
-String _$accountNotifierHash() => r'4a28681d192f9ce75a8a5357f306b6f61ca01560';
+String _$accountNotifierHash() => r'8661feafc15a58954fd6e307371b126b0933bd38';
 
 /// See also [AccountNotifier].
 @ProviderFor(AccountNotifier)

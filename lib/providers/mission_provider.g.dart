@@ -58,7 +58,7 @@ final userMissionProvider = AutoDisposeFutureProvider<Mission?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UserMissionRef = AutoDisposeFutureProviderRef<Mission?>;
-String _$missionariesHash() => r'c39993cf4baa56647428fe69422533c2625f6779';
+String _$missionariesHash() => r'397ebccaca8d132726a7e05b720da82570f3261d';
 
 /// See also [missionaries].
 @ProviderFor(missionaries)
@@ -75,7 +75,7 @@ final missionariesProvider = AutoDisposeFutureProvider<List<User>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef MissionariesRef = AutoDisposeFutureProviderRef<List<User>>;
-String _$missionNotifierHash() => r'a7b7559e64b2db388c139cda155dc168d45e659e';
+String _$missionNotifierHash() => r'7f079cdddc9fec00510caaa9aec9a4ec03504b22';
 
 /// See also [MissionNotifier].
 @ProviderFor(MissionNotifier)
